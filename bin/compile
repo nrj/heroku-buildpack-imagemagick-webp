@@ -1,0 +1,21 @@
+#!/bin/sh
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+BUILD_DIR=$1
+VENDOR_DIR="vendor"
+DOWNLOAD_URL="https://s3.amazonaws.com/buildpack-assets/imagemagick.tar.gz"
+echo "=======> Installing ImageMagick with WebP support"
+echo "Downloading ... ${DOWNLOAD_URL}" | indent
+
+cd $BUILD_DIR
+mkdir -p $VENDOR_DIR
+cd $VENDOR_DIR
+curl -L --silent $DOWNLOAD_URL | tar xz
+
+echo "Updating LD_LIBRARY_PATH" | indent
+PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick-webp.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+echo 'export LD_LIBRARY_PATH="vendor/imagemagick/lib:$LD_LIBRARY_PATH"' >> $PROFILE_PATH
