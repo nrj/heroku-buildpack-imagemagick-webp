@@ -57,7 +57,7 @@ if [ ! -f $CACHE_FILE ]; then
 
 else
 
-  echo "-----> Using ImageMagick and libwebp from cache"
+  echo "-----> Extracting cached ImageMagick and libwebp from $CACHE_FILE"
   tar xzf $CACHE_FILE $VENDOR_DIR
 fi
 
