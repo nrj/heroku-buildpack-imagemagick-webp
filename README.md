@@ -22,6 +22,15 @@ https://github.com/heroku/heroku-buildpack-nodejs
 
 The second line is for a nodejs buildpack, but it can be any other buildpack you want. If it is not working with yours, please report a bug.
 
+## Verify Installation
+
+You can verify that ImageMagick was built with libwebp support by running the following:
+
+```
+heroku run "identify -list format"
+```
+
+
 ## LICENSE - "MIT License"
 
 Copyright (c) 2014 Nick Jensen, https://nrj.io
