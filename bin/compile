@@ -58,7 +58,7 @@ if [ ! -f $CACHE_FILE ]; then
 else
 
   echo "-----> Extracting cached ImageMagick and libwebp from $CACHE_FILE"
-  tar xzf -C $CACHE_FILE $VENDOR_DIR
+  tar xzf $CACHE_FILE -C $VENDOR_DIR
 fi
 
 # update PATH
