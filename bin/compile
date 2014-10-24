@@ -26,7 +26,7 @@ if [ ! -f $CACHE_FILE ]; then
 
   echo "-----> Building libwebp"
   cd $LIBWEBP_DIR
-  ./configure --prefix=$INSTALL_DIR
+  ./configure --prefix=$INSTALL_DIR --disable-static
   make && make install
   cd ..
   rm -rf $LIBWEBP_DIR
@@ -45,7 +45,7 @@ if [ ! -f $CACHE_FILE ]; then
   cd $IMAGE_MAGICK_DIR
   export CPPFLAGS="-I$INSTALL_DIR/include"
   export LDFLAGS="-L$INSTALL_DIR/lib"
-  ./configure --prefix=$INSTALL_DIR --with-webp
+  ./configure --prefix=$INSTALL_DIR --with-webp --disable-static
   make && make install
   cd ..
   rm -rf $IMAGE_MAGICK_DIR
@@ -60,11 +60,13 @@ if [ ! -f $CACHE_FILE ]; then
 
 else
 
+  # cache exists, extract it
+
   echo "-----> Extracting ImageMagick and libwebp $CACHE_FILE => $VENDOR_DIR"
   tar xzf $CACHE_FILE -C $VENDOR_DIR
 fi
 
-# update PATH
+# update PATH and LD_LIBRARY_PATH
 
 echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick-webp.sh"
