@@ -1,21 +1,84 @@
 #!/bin/sh
 
-indent() {
-  sed -u 's/^/       /'
-}
-
 BUILD_DIR=$1
-VENDOR_DIR="vendor"
-DOWNLOAD_URL="https://s3.amazonaws.com/buildpack-assets/imagemagick.tar.gz"
-echo "=======> Installing ImageMagick with WebP support"
-echo "Downloading ... ${DOWNLOAD_URL}" | indent
+CACHE_DIR=$2
+
+VENDOR_DIR="$BUILD_DIR/vendor"
+
+mkdir -p $CACHE_DIR
+mkdir -p $VENDOR_DIR
+
+
+# install libwebp
+
+LIBWEBP_VERSION="0.4.2"
+LIBWEBP_FILE="libwebp-$LIBWEBP_VERSION.tar.gz"
+LIBWEBP_DIR="libwebp-$LIBWEBP_VERSION"
+LIBWEBP_URL="http://downloads.webmproject.org/releases/webp/$LIBWEBP_FILE"
 
 cd $BUILD_DIR
-mkdir -p $VENDOR_DIR
-cd $VENDOR_DIR
-curl -L --silent $DOWNLOAD_URL | tar xz
 
-echo "Updating LD_LIBRARY_PATH" | indent
+if [ ! -f "$CACHE_DIR/$LIBWEBP_FILE" ]; then
+  
+  echo "-----> Downloading libwebp from $LIBWEBP_URL"
+  curl -L --silent $LIBWEBP_URL | tar xz
+
+  echo "-----> Building libwebp"
+  cd $LIBWEBP_DIR
+  ./configure --prefix=$VENDOR_DIR
+  make && make install
+  cd ..
+  tar czf "$CACHE_DIR/$LIBWEBP_FILE" $LIBWEBP_DIR
+
+else
+
+  echo "-----> Using $LIBWEBP_FILE from cache"
+  tar xzf "$CACHE_DIR/$LIBWEBP_FILE"
+  cd $LIBWEBP_DIR
+  make install
+  cd ..
+fi
+
+rm -rf $LIBWEBP_DIR
+
+
+# install imagemagick
+
+IMAGE_MAGICK_VERSION="6.8.9-8"
+IMAGE_MAGICK_FILE="ImageMagick-$IMAGE_MAGICK_VERSION.tar.gz"
+IMAGE_MAGICK_DIR="ImageMagick-$IMAGE_MAGICK_VERSION"
+IMAGE_MAGICK_URL="http://www.imagemagick.org/download/$IMAGE_MAGICK_FILE"
+
+if [ ! -f "$CACHE_DIR/$IMAGE_MAGICK_FILE" ]; then
+  
+  echo "-----> Downloading imagemagick from $IMAGE_MAGICK_URL"
+  curl -L --silent $IMAGE_MAGICK_URL | tar xz
+
+  echo "-----> Building imagemagick"
+  cd $IMAGE_MAGICK_DIR
+  export CPPFLAGS="-I$VENDOR_DIR/include"
+  export LDFLAGS="-L$VENDOR_DIR/lib"
+  ./configure --prefix=$VENDOR_DIR --with-webp
+  make && make install
+  cd ..
+  tar czf "$CACHE_DIR/$IMAGE_MAGICK_FILE" $IMAGE_MAGICK_DIR
+
+else
+
+  echo "-----> Using $IMAGE_MAGICK_FILE from cache"
+  tar xzf "$CACHE_DIR/$IMAGE_MAGICK_FILE"
+  cd $IMAGE_MAGICK_DIR
+  make install
+  cd ..
+fi
+
+rm -rf $IMAGE_MAGICK_DIR
+
+
+# update PATH
+
+echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick-webp.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export LD_LIBRARY_PATH="vendor/imagemagick/lib:$LD_LIBRARY_PATH"' >> $PROFILE_PATH
+echo "export PATH=$HOME/vendor/bin:\$PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=$HOME/vendor/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
