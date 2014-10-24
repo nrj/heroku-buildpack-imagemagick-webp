@@ -30,7 +30,7 @@ You can verify that ImageMagick was built with libwebp support by running the fo
 heroku run "identify -list format"
 ```
 
-If the output includes ```WEBP* rw-   WebP Image Format (libwebp 0.4.2[0203])``` then you're good to go!
+If the output includes ```WEBP* rw-   WebP Image Format (libwebp 0.4.2)``` then you're all set.
 
 
 ## LICENSE - "MIT License"
