@@ -53,7 +53,9 @@ if [ ! -f $CACHE_FILE ]; then
   # cache for future deploys
   
   echo "-----> Caching ImageMagick and libwebp installation"
-  tar czf $CACHE_FILE $INSTALL_DIR
+  REL_INSTALL_DIR="imagemagick-webp"
+  tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
+  mv $REL_INSTALL_DIR.tar.gz $CACHE_FILE
 
 else
 
