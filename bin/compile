@@ -13,24 +13,24 @@ mkdir -p $VENDOR_DIR
 if [ ! -f $CACHE_FILE ]; then
 
   cd $BUILD_DIR
-  
-  # install libwebp
+   
+  # install nasm
 
-  LIBWEBP_VERSION="0.4.2"
-  LIBWEBP_FILE="libwebp-$LIBWEBP_VERSION.tar.gz"
-  LIBWEBP_DIR="libwebp-$LIBWEBP_VERSION"
-  LIBWEBP_URL="http://downloads.webmproject.org/releases/webp/$LIBWEBP_FILE"
+  NASM_VERSION="2.11.06"
+  NASM_FILE="nasm-$NASM_VERSION.tar.gz"
+  NASM_DIR="nasm-$NASM_VERSION"
+  NASM_URL="http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/$NASM_FILE"
 
-  echo "-----> Downloading libwebp from $LIBWEBP_URL"
-  curl -L --silent $LIBWEBP_URL | tar xz
+  echo "-----> Downloading nasm from $NASM_URL"
+  curl -L --silent $NASM_URL | tar xz
 
-  echo "-----> Building libwebp"
-  cd $LIBWEBP_DIR
+  echo "-----> Building nasm"
+  cd $NASM_DIR
   ./configure --prefix=$INSTALL_DIR --disable-static
   make && make install
   cd ..
-  rm -rf $LIBWEBP_DIR
- 
+  rm -rf $NASM_DIR
+
   
   # install jpeg-turbo
    
@@ -48,6 +48,24 @@ if [ ! -f $CACHE_FILE ]; then
   make && make install
   cd ..
   rm -rf $JPEG_DIR
+ 
+  # install libwebp
+
+  LIBWEBP_VERSION="0.4.2"
+  LIBWEBP_FILE="libwebp-$LIBWEBP_VERSION.tar.gz"
+  LIBWEBP_DIR="libwebp-$LIBWEBP_VERSION"
+  LIBWEBP_URL="http://downloads.webmproject.org/releases/webp/$LIBWEBP_FILE"
+
+  echo "-----> Downloading libwebp from $LIBWEBP_URL"
+  curl -L --silent $LIBWEBP_URL | tar xz
+
+  echo "-----> Building libwebp"
+  cd $LIBWEBP_DIR
+  ./configure --prefix=$INSTALL_DIR --disable-static
+  make && make install
+  cd ..
+  rm -rf $LIBWEBP_DIR
+  
  
   # install graphicsmagick
 
