@@ -16,38 +16,38 @@ if [ ! -f $CACHE_FILE ]; then
   
   # install nasm
 
-  NASM_VERSION="2.11.06"
-  NASM_FILE="nasm-$NASM_VERSION.tar.gz"
-  NASM_DIR="nasm-$NASM_VERSION"
-  NASM_URL="http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/$NASM_FILE"
-
-  echo "-----> Downloading nasm from $NASM_URL"
-  curl -L --silent $NASM_URL | tar xz
-
-  echo "-----> Building nasm"
-  cd $NASM_DIR
-  ./configure --prefix=$INSTALL_DIR
-  make && make install
-  cd ..
-  rm -rf $NASM_DIR
+  # NASM_VERSION="2.11.06"
+  # NASM_FILE="nasm-$NASM_VERSION.tar.gz"
+  # NASM_DIR="nasm-$NASM_VERSION"
+  # NASM_URL="http://www.nasm.us/pub/nasm/releasebuilds/$NASM_VERSION/$NASM_FILE"
+  #
+  # echo "-----> Downloading nasm from $NASM_URL"
+  # curl -L --silent $NASM_URL | tar xz
+  #
+  # echo "-----> Building nasm"
+  # cd $NASM_DIR
+  # ./configure --prefix=$INSTALL_DIR
+  # make && make install
+  # cd ..
+  # rm -rf $NASM_DIR
 
   
   # install jpeg-turbo
    
-  JPEG_VERSION="1.3.1"
-  JPEG_FILE="libjpeg-turbo-$JPEG_VERSION.tar.gz"
-  JPEG_DIR="libjpeg-turbo-$JPEG_VERSION"
-  JPEG_URL="https://s3.amazonaws.com/fhqwhgads/$JPEG_FILE"
-
-  echo "-----> Downloading libjpeg-turbo from $JPEG_URL"
-  curl -L --silent $JPEG_URL | tar xz
-
-  echo "-----> Building libjpeg-turbo"
-  cd $JPEG_DIR
-  ./configure --prefix=$INSTALL_DIR --bindir=$INSTALL_DIR/bin --libdir=$INSTALL_DIR/lib --includedir=$INSTALL_DIR/lib --disable-static
-  make && make install
-  cd ..
-  rm -rf $JPEG_DIR
+  # JPEG_VERSION="1.3.1"
+  # JPEG_FILE="libjpeg-turbo-$JPEG_VERSION.tar.gz"
+  # JPEG_DIR="libjpeg-turbo-$JPEG_VERSION"
+  # JPEG_URL="https://s3.amazonaws.com/fhqwhgads/$JPEG_FILE"
+  #
+  # echo "-----> Downloading libjpeg-turbo from $JPEG_URL"
+  # curl -L --silent $JPEG_URL | tar xz
+  #
+  # echo "-----> Building libjpeg-turbo"
+  # cd $JPEG_DIR
+  # ./configure --prefix=$INSTALL_DIR --bindir=$INSTALL_DIR/bin --libdir=$INSTALL_DIR/lib --includedir=$INSTALL_DIR/lib --disable-static
+  # make && make install
+  # cd ..
+  # rm -rf $JPEG_DIR
  
   # install libwebp
 
