@@ -12,9 +12,6 @@ mkdir -p $VENDOR_DIR
 
 if [ ! -f $CACHE_FILE ]; then
 
-  export CPPFLAGS="-I$INSTALL_DIR/include"
-  export LDFLAGS="-L$INSTALL_DIR/lib"
-
   cd $BUILD_DIR
   
   # install nasm
@@ -48,6 +45,8 @@ if [ ! -f $CACHE_FILE ]; then
   echo "-----> Building libjpeg-turbo"
   cd $JPEG_DIR
   ./configure --prefix=$INSTALL_DIR --disable-static
+  export CPPFLAGS="-I$INSTALL_DIR/include"
+  export LDFLAGS="-L$INSTALL_DIR/lib"
   make && make install
   cd ..
   rm -rf $JPEG_DIR
