@@ -12,8 +12,11 @@ mkdir -p $VENDOR_DIR
 
 if [ ! -f $CACHE_FILE ]; then
 
+  export CPPFLAGS="-I$INSTALL_DIR/include"
+  export LDFLAGS="-L$INSTALL_DIR/lib"
+
   cd $BUILD_DIR
-   
+  
   # install nasm
 
   NASM_VERSION="2.11.06"
@@ -26,7 +29,7 @@ if [ ! -f $CACHE_FILE ]; then
 
   echo "-----> Building nasm"
   cd $NASM_DIR
-  ./configure --prefix=$INSTALL_DIR --disable-static
+  ./configure --prefix=$INSTALL_DIR
   make && make install
   cd ..
   rm -rf $NASM_DIR
@@ -79,8 +82,6 @@ if [ ! -f $CACHE_FILE ]; then
 
   echo "-----> Building GraphicsMagick"
   cd $GRAPHICS_MAGICK_DIR
-  export CPPFLAGS="-I$INSTALL_DIR/include"
-  export LDFLAGS="-L$INSTALL_DIR/lib"
   ./configure --prefix=$INSTALL_DIR --enable-openmp-slow --with-webp --disable-static
   make && make install
   cd ..
