@@ -4,8 +4,8 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 
 VENDOR_DIR="$BUILD_DIR/vendor"
-INSTALL_DIR="$VENDOR_DIR/imagemagick-webp"
-CACHE_FILE="$CACHE_DIR/imagemagick-webp.tar.gz"
+INSTALL_DIR="$VENDOR_DIR/graphicsmagick-webp"
+CACHE_FILE="$CACHE_DIR/graphicsmagick-webp.tar.gz"
 
 mkdir -p $CACHE_DIR
 mkdir -p $VENDOR_DIR
@@ -30,31 +30,49 @@ if [ ! -f $CACHE_FILE ]; then
   make && make install
   cd ..
   rm -rf $LIBWEBP_DIR
+ 
   
-  # install imagemagick
+  # install jpeg-turbo
+   
+  JPEG_VERSION="1.3.1"
+  JPEG_FILE="libjpeg-turbo-$JPEG_VERSION.tar.gz"
+  JPEG_DIR="libjpeg-turbo-$JPEG_VERSION"
+  JPEG_URL="https://s3.amazonaws.com/fhqwhgads/$JPEG_FILE"
 
-  IMAGE_MAGICK_VERSION="6.8.9-8"
-  IMAGE_MAGICK_FILE="ImageMagick-$IMAGE_MAGICK_VERSION.tar.gz"
-  IMAGE_MAGICK_DIR="ImageMagick-$IMAGE_MAGICK_VERSION"
-  IMAGE_MAGICK_URL="http://www.imagemagick.org/download/releases/$IMAGE_MAGICK_FILE"
+  echo "-----> Downloading libjpeg-turbo from $JPEG_URL"
+  curl -L --silent $JPEG_URL | tar xz
 
-  echo "-----> Downloading ImageMagick from $IMAGE_MAGICK_URL"
-  curl -L --silent $IMAGE_MAGICK_URL | tar xz
-
-  echo "-----> Building ImageMagick"
-  cd $IMAGE_MAGICK_DIR
-  export CPPFLAGS="-I$INSTALL_DIR/include"
-  export LDFLAGS="-L$INSTALL_DIR/lib"
-  ./configure --prefix=$INSTALL_DIR --with-webp --disable-static
+  echo "-----> Building libjpeg-turbo"
+  cd $JPEG_DIR
+  ./configure --prefix=$INSTALL_DIR --disable-static
   make && make install
   cd ..
-  rm -rf $IMAGE_MAGICK_DIR
+  rm -rf $JPEG_DIR
+ 
+  # install graphicsmagick
+
+  GRAPHICS_MAGICK_VERSION="1.3.20"
+  GRAPHICS_MAGICK_FILE="GraphicsMagick-$GRAPHICS_MAGICK_VERSION.tar.gz"
+  GRAPHICS_MAGICK_DIR="GraphicsMagick-$GRAPHICS_MAGICK_VERSION"
+  GRAPHICS_MAGICK_URL="ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/1.3/$GRAPHICS_MAGICK_FILE"
+
+  echo "-----> Downloading GraphicsMagick from $GRAPHICS_MAGICK_URL"
+  curl -L --silent $GRAPHICS_MAGICK_URL | tar xz
+
+  echo "-----> Building GraphicsMagick"
+  cd $GRAPHICS_MAGICK_DIR
+  export CPPFLAGS="-I$INSTALL_DIR/include"
+  export LDFLAGS="-L$INSTALL_DIR/lib"
+  ./configure --prefix=$INSTALL_DIR --enable-openmp-slow --with-webp --disable-static
+  make && make install
+  cd ..
+  rm -rf $GRAPHICS_MAGICK_DIR
 
   # cache for future deploys
   
-  echo "-----> Caching ImageMagick and libwebp installation"
+  echo "-----> Caching GraphicsMagick and libwebp installation"
   cd $VENDOR_DIR
-  REL_INSTALL_DIR="imagemagick-webp"
+  REL_INSTALL_DIR="graphicsmagick-webp"
   tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
   mv $REL_INSTALL_DIR.tar.gz $CACHE_FILE
 
@@ -62,15 +80,15 @@ else
 
   # cache exists, extract it
 
-  echo "-----> Extracting ImageMagick and libwebp $CACHE_FILE => $VENDOR_DIR"
+  echo "-----> Extracting GraphicsMagick and libwebp $CACHE_FILE => $VENDOR_DIR"
   tar xzf $CACHE_FILE -C $VENDOR_DIR
 fi
 
 # update PATH and LD_LIBRARY_PATH
 
 echo "-----> Updating environment variables"
-PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick-webp.sh"
-ACTUAL_INSTALL_PATH="$HOME/vendor/imagemagick-webp"
+PROFILE_PATH="$BUILD_DIR/.profile.d/graphicsmagick-webp.sh"
+ACTUAL_INSTALL_PATH="$HOME/vendor/graphicsmagick-webp"
 mkdir -p $(dirname $PROFILE_PATH)
 echo "export PATH=$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
 echo "export LD_LIBRARY_PATH=$ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH

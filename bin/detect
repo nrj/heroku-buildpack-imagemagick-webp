@@ -1,5 +1,5 @@
 #!/bin/sh
 
 # this pack is valid for all apps
-echo "imagemagick-webp"
+echo "graphicsmagick-webp"
 exit 0
