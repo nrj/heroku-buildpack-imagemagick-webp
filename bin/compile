@@ -37,7 +37,7 @@ if [ ! -f $CACHE_FILE ]; then
   GRAPHICS_MAGICK_VERSION="1.3.20"
   GRAPHICS_MAGICK_FILE="GraphicsMagick-$GRAPHICS_MAGICK_VERSION.tar.gz"
   GRAPHICS_MAGICK_DIR="GraphicsMagick-$GRAPHICS_MAGICK_VERSION"
-  GRAPHICS_MAGICK_URL="ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/1.3/$GRAPHICS_MAGICK_FILE"
+  GRAPHICS_MAGICK_URL="http://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$GRAPHICS_MAGICK_VERSION/$GRAPHICS_MAGICK_FILE"
 
   echo "-----> Downloading GraphicsMagick from $GRAPHICS_MAGICK_URL"
   curl -L --silent $GRAPHICS_MAGICK_URL | tar xz
@@ -46,7 +46,7 @@ if [ ! -f $CACHE_FILE ]; then
   cd $GRAPHICS_MAGICK_DIR
   export CPPFLAGS="-I$INSTALL_DIR/include"
   export LDFLAGS="-L$INSTALL_DIR/lib"
-  ./configure --prefix=$INSTALL_DIR --enable-openmp-slow --with-webp --disable-static
+  ./configure --prefix=$INSTALL_DIR --with-webp --without-tiff --without-perl --enable-openmp-slow --disable-static
   make && make install
   cd ..
   rm -rf $GRAPHICS_MAGICK_DIR
@@ -66,7 +66,7 @@ if [ ! -f $CACHE_FILE ]; then
   cd $IMAGE_MAGICK_DIR
   export CPPFLAGS="-I$INSTALL_DIR/include"
   export LDFLAGS="-L$INSTALL_DIR/lib"
-  ./configure --prefix=$INSTALL_DIR --with-webp --disable-static
+  ./configure --prefix=$INSTALL_DIR --with-webp --without-tiff --without-perl --disable-static
   make && make install
   cd ..
   rm -rf $IMAGE_MAGICK_DIR
