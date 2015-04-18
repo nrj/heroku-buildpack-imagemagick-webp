@@ -50,7 +50,7 @@ if [ ! -f $CACHE_FILE ]; then
   
   # install libwebp
 
-  LIBWEBP_VERSION="0.4.2"
+  LIBWEBP_VERSION="0.4.3"
   LIBWEBP_FILE="libwebp-$LIBWEBP_VERSION.tar.gz"
   LIBWEBP_DIR="libwebp-$LIBWEBP_VERSION"
   LIBWEBP_URL="http://downloads.webmproject.org/releases/webp/$LIBWEBP_FILE"
@@ -67,7 +67,7 @@ if [ ! -f $CACHE_FILE ]; then
 
   # install imagemagick
 
-  IMAGE_MAGICK_VERSION="6.9.0-9"
+  IMAGE_MAGICK_VERSION="6.9.1-1"
   IMAGE_MAGICK_FILE="ImageMagick-$IMAGE_MAGICK_VERSION.tar.gz"
   IMAGE_MAGICK_DIR="ImageMagick-$IMAGE_MAGICK_VERSION"
   IMAGE_MAGICK_URL="http://www.imagemagick.org/download/releases/$IMAGE_MAGICK_FILE"
