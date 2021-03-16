@@ -104,7 +104,8 @@ fi
 
 echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick-webp.sh"
-ACTUAL_INSTALL_PATH="$HOME/vendor/imagemagick-webp"
+# Single quotes since we want $HOME to be resolved at runtime, not build time.
+RUNTIME_INSTALL_PATH='$HOME/vendor/imagemagick-webp'
 mkdir -p $(dirname $PROFILE_PATH)
-echo "export PATH=$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
-echo "export LD_LIBRARY_PATH=$ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
+echo "export PATH=$RUNTIME_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=$RUNTIME_INSTALL_PATH/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
